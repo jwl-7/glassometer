@@ -415,9 +415,9 @@ function script.settings()
     ui.textColored('RIGHT', COLOR_YELLOW_OFF); ui.sameLine(0, 0)
     ui.text('-'); ui.sameLine(0, 0)
     ui.textColored('CLICK', COLOR_YELLOW_OFF); ui.sameLine(0, 0)
-    ui.text('] on tacometer to '); ui.sameLine(0, 0)
+    ui.text('] to '); ui.sameLine(0, 0)
     ui.textColored('pin ', COLOR_YELLOW_OFF); ui.sameLine(0, 0)
-    ui.text('it!')
+    ui.text('tacometer')
 
     local label = SETTINGS.imperial and 'Speed Units: MPH' or 'Speed Units: KMH'
     if ui.button(label .. '##units', vec2(156, 22)) then
