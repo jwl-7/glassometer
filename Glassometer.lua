@@ -21,6 +21,7 @@ local COLOR_VIOLET_SOFT     = rgbm(0.51, 0.39, 0.86, 1.00)
 local COLOR_YELLOW_AMBER    = rgbm(1.00, 0.82, 0.15, 1.00)
 local COLOR_YELLOW_BRONZE   = rgbm(0.08, 0.06, 0.02, 0.50)
 local COLOR_YELLOW_GOLDEN   = rgbm(1.00, 0.75, 0.10, 0.50)
+local COLOR_YELLOW_OFF      = rgbm(1.00, 0.86, 0.39, 1.00)
 
 local FONT = 'Orbitron:./fonts/orbitron.ttf'
 
@@ -392,6 +393,13 @@ local function updateRpm(dt, rpm)
     return _mmin(_rpm / 10000, 1.05)
 end
 
+local function handleWindowPin()
+    if APP_WINDOW and ui.windowHovered() and ui.mouseClicked(ui.MouseButton.Right) then
+        local pinned = APP_WINDOW:pinned()
+        APP_WINDOW:setPinned(not pinned)
+    end
+end
+
 function script.settings()
     ui.pushDWriteFont(FONT)
     ui.pushStyleColor(ui.StyleColor.Button, COLOR_GREY)
@@ -403,12 +411,13 @@ function script.settings()
     ui.pushStyleColor(ui.StyleColor.FrameBgHovered, COLOR_BLUE_SKY)
     ui.pushStyleColor(ui.StyleColor.FrameBgActive, COLOR_VIOLET)
 
-    if ui.button('Pin Window' .. '##pinme', vec2(156, 22)) then
-        if APP_WINDOW then
-            local pinned = APP_WINDOW:pinned()
-            APP_WINDOW:setPinned(not pinned)
-        end
-    end
+    ui.text('['); ui.sameLine(0, 0)
+    ui.textColored('RIGHT', COLOR_YELLOW_OFF); ui.sameLine(0, 0)
+    ui.text('-'); ui.sameLine(0, 0)
+    ui.textColored('CLICK', COLOR_YELLOW_OFF); ui.sameLine(0, 0)
+    ui.text('] on tacometer to '); ui.sameLine(0, 0)
+    ui.textColored('pin ', COLOR_YELLOW_OFF); ui.sameLine(0, 0)
+    ui.text('it!')
 
     local label = SETTINGS.imperial and 'Speed Units: MPH' or 'Speed Units: KMH'
     if ui.button(label .. '##units', vec2(156, 22)) then
@@ -436,18 +445,21 @@ end
 ---@param dt number
 function script.glass(dt)
     if not _car then return end
-    ui.pushDWriteFont(FONT)
-    local cx    = ui.windowSize().x / 2
-    local cy    = ui.windowSize().y / 2
-    local rpmf  = updateRpm(dt, _car.rpm)
-    local speed = SETTINGS.imperial and _mfloor(_car.speedKmh * KMH_TO_MPH) or _mfloor(_car.speedKmh)
-    local angle = ARC_START + rpmf * TOTAL_SWEEP
-    drawGlassDisc(cx, cy)
-    drawRpmTrack(cx, cy, rpmf)
-    drawTicks(cx, cy)
-    drawBoostArc(cx, cy, _car.turboBoost)
-    drawGearBox(cx, cy, getGearName(_car.gear))
-    drawSpeedBox(cx, cy, speed)
-    drawNeedle(cx, cy, angle)
-    ui.popDWriteFont()
+    ui.childWindow('##glass', ui.availableSpace(), ui.WindowFlags.None, function()
+        ui.pushDWriteFont(FONT)
+        local cx    = ui.windowSize().x / 2
+        local cy    = ui.windowSize().y / 2
+        local rpmf  = updateRpm(dt, _car.rpm)
+        local speed = SETTINGS.imperial and _mfloor(_car.speedKmh * KMH_TO_MPH) or _mfloor(_car.speedKmh)
+        local angle = ARC_START + rpmf * TOTAL_SWEEP
+        drawGlassDisc(cx, cy)
+        drawRpmTrack(cx, cy, rpmf)
+        drawTicks(cx, cy)
+        drawBoostArc(cx, cy, _car.turboBoost)
+        drawGearBox(cx, cy, getGearName(_car.gear))
+        drawSpeedBox(cx, cy, speed)
+        drawNeedle(cx, cy, angle)
+        ui.popDWriteFont()
+        handleWindowPin()
+    end)
 end
