@@ -402,10 +402,19 @@ function script.settings()
     ui.pushStyleColor(ui.StyleColor.FrameBg, COLOR_GREY)
     ui.pushStyleColor(ui.StyleColor.FrameBgHovered, COLOR_BLUE_SKY)
     ui.pushStyleColor(ui.StyleColor.FrameBgActive, COLOR_VIOLET)
+
+    if ui.button('Pin Window' .. '##pinme', vec2(156, 22)) then
+        if APP_WINDOW then
+            local pinned = APP_WINDOW:pinned()
+            APP_WINDOW:setPinned(not pinned)
+        end
+    end
+
     local label = SETTINGS.imperial and 'Speed Units: MPH' or 'Speed Units: KMH'
     if ui.button(label .. '##units', vec2(156, 22)) then
         SETTINGS.imperial = not SETTINGS.imperial
     end
+
     ui.setNextItemWidth(156)
     if ui.slider('##scale', _scale, 0.1, 5, 'Scale: %.1f') then
         SETTINGS.scale = _scale.value
@@ -420,6 +429,7 @@ function script.settings()
             APP_WINDOW:resize(WINDOW_SIZE:clone():scale(SETTINGS.scale))
         end
     end
+
     ui.popDWriteFont()
 end
 
