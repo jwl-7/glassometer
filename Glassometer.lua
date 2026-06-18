@@ -445,21 +445,19 @@ end
 ---@param dt number
 function script.glass(dt)
     if not _car then return end
-    ui.childWindow('##glass', ui.availableSpace(), ui.WindowFlags.None, function()
-        ui.pushDWriteFont(FONT)
-        local cx    = ui.windowSize().x / 2
-        local cy    = ui.windowSize().y / 2
-        local rpmf  = updateRpm(dt, _car.rpm)
-        local speed = SETTINGS.imperial and _mfloor(_car.speedKmh * KMH_TO_MPH) or _mfloor(_car.speedKmh)
-        local angle = ARC_START + rpmf * TOTAL_SWEEP
-        drawGlassDisc(cx, cy)
-        drawRpmTrack(cx, cy, rpmf)
-        drawTicks(cx, cy)
-        drawBoostArc(cx, cy, _car.turboBoost)
-        drawGearBox(cx, cy, getGearName(_car.gear))
-        drawSpeedBox(cx, cy, speed)
-        drawNeedle(cx, cy, angle)
-        ui.popDWriteFont()
-        handleWindowPin()
-    end)
+    ui.pushDWriteFont(FONT)
+    local cx    = ui.windowSize().x / 2
+    local cy    = ui.windowSize().y / 2
+    local rpmf  = updateRpm(dt, _car.rpm)
+    local speed = SETTINGS.imperial and _mfloor(_car.speedKmh * KMH_TO_MPH) or _mfloor(_car.speedKmh)
+    local angle = ARC_START + rpmf * TOTAL_SWEEP
+    drawGlassDisc(cx, cy)
+    drawRpmTrack(cx, cy, rpmf)
+    drawTicks(cx, cy)
+    drawBoostArc(cx, cy, _car.turboBoost)
+    drawGearBox(cx, cy, getGearName(_car.gear))
+    drawSpeedBox(cx, cy, speed)
+    drawNeedle(cx, cy, angle)
+    ui.popDWriteFont()
+    handleWindowPin()
 end
