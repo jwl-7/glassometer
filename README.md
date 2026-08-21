@@ -2,7 +2,7 @@
 
 ### glassmorphism speedtacometer for Assetto Corsa
 
-<img width="586" height="599" alt="image" src="https://github.com/user-attachments/assets/32a9c2f7-4793-4734-bd68-47270116c85d" />
+<img width="256" alt="glassometer-ss" src="https://github.com/user-attachments/assets/98c22a41-28cd-4433-abf6-70165487d998" />
 
 ## Features
 - SPEED in `mph` or `kmh`
