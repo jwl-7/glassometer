@@ -439,6 +439,7 @@ function script.settings()
         end
     end
 
+    ui.popStyleColor(8)
     ui.popDWriteFont()
 end
 
